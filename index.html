@@ -2,286 +2,212 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<title>DBR RP SYSTEM</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>РП ПОРТАЛ ДБР</title>
 
 <style>
 body{
-margin:0;
 font-family:Arial;
-background:#04130b;
+background:green;
 color:white;
-}
-
-header{
 text-align:center;
-padding:25px;
-background:#06351f;
-color:#00ff88;
-text-shadow:0 0 10px #00ff88;
+margin:0;
 }
 
-.box{
-max-width:600px;
-margin:10px auto;
-padding:15px;
-border:1px solid #00ff88;
-border-radius:10px;
-background:#0a1f14;
-}
-
-input{
-width:100%;
+input,button{
 padding:10px;
-margin:5px 0;
-border:none;
-border-radius:8px;
-background:#062015;
-color:white;
+margin:5px;
+width:80%;
+max-width:300px;
 }
 
-button{
-width:100%;
+.card{
+background:rgba(0,0,0,0.3);
 padding:10px;
-background:#00ff88;
-border:none;
-cursor:pointer;
-font-weight:bold;
-margin-top:5px;
-}
-
-button:hover{box-shadow:0 0 10px #00ff88;}
-
-#portal{display:none;}
-
-.profile{
-padding:15px;
-border:1px solid #00ff88;
+margin:10px;
 border-radius:10px;
-background:#0a1f14;
 }
 
-.red{background:#ff3b3b !important;}
-.blue{background:#1e66ff !important;}
-.gold{background:#d4af37 !important;color:black !important;}
-.green{background:#00ff88 !important;}
+.hidden{display:none;}
 
-pre{
-white-space:pre-wrap;
-color:#b6ffda;
+.tab{
+display:none;
+padding:10px;
 }
+
+.active{display:block;}
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>DBR RP SYSTEM</h1>
-</header>
+<h1>🚔 РП ПОРТАЛ ДБР</h1>
 
-<!-- REGISTER -->
-<div id="auth">
-<div class="box">
-<h2>📝 Реєстрація</h2>
+<div id="auth" class="card">
+<h3>Реєстрація / Вхід</h3>
 
-<input id="name" placeholder="Ім'я та прізвище">
+<input id="username" placeholder="Ім'я">
 <input id="rank" placeholder="Звання">
 <input id="badge" placeholder="Жетон">
-<input id="car" placeholder="Авто">
+<input id="car" placeholder="Номер машини">
+<input id="tg" placeholder="Telegram">
+<input id="tgname" placeholder="Тг нік">
+<input id="roblox" placeholder="Roblox нік">
+<input id="password" type="password" placeholder="Пароль">
 
-<button onclick="register()">ЗАРЕЄСТРУВАТИСЯ</button>
-</div>
-</div>
-
-<!-- PORTAL -->
-<div id="portal">
-
-<div id="profileBox" class="profile">
-<h3>👤 Профіль</h3>
-<p>Ім'я: <span id="p_name"></span></p>
-<p>Звання: <span id="p_rank"></span></p>
-<p>Авто: <span id="p_car"></span></p>
-<p>DB: <span id="p_db"></span></p>
-<p>Колір: <span id="p_color"></span></p>
+<button onclick="register()">Реєстрація</button>
+<button onclick="login()">Вхід</button>
 </div>
 
-<!-- SHOP -->
-<div class="box">
-<h2>🛒 Магазин DB</h2>
-<button onclick="buy('blue',500)">Синій - 500 DB</button>
-<button onclick="buy('gold',1000)">Золотий - 1000 DB</button>
-<button onclick="buy('red',500)">Червоний - 500 DB</button>
+<div id="panel" class="hidden">
+
+<h2>👤 Профіль</h2>
+<p id="info"></p>
+<h3>DB: <span id="db">0</span></h3>
+
+<button onclick="setBg('green')">Зелений</button>
+<button onclick="buy('blue',500)">Синій 500</button>
+<button onclick="buy('red',500)">Червоний 500</button>
+<button onclick="buy('gold',1000)">Золотий 1000</button>
+
+<hr>
+
+<button onclick="openTab('rules')">📕 Правила</button>
+<button onclick="openTab('arrest')">🚔 Затримання</button>
+<button onclick="openTab('code')">📘 Кодекс</button>
+<button onclick="openTab('constitution')">⚖️ Конституція</button>
+<button onclick="openTab('admin')">👑 Адмін</button>
+
+<div id="rules" class="tab active">📕 СТАТУТ ДБР... (встав текст якщо хочеш)</div>
+
+<div id="arrest" class="tab">🚔 Інформація про затримання...</div>
+
+<div id="code" class="tab">📘 Кодекс ДБР...</div>
+
+<div id="constitution" class="tab">⚖️ Конституція ДБР...</div>
+
+<div id="admin" class="tab card">
+<input id="adminPass" placeholder="Admin пароль">
+<input id="target" placeholder="Користувач">
+<input id="amount" placeholder="DB">
+<button onclick="giveDB()">Видати DB</button>
 </div>
 
-<!-- RULES -->
-<div class="box">
-<h2>📊 СИСТЕМА БАЛІВ ДБР</h2>
-<pre>
-🏋️ Тренування — +1
-📑 Документація — +2
-💰 Хабарники — +3
-🔫 Злочинці — +2
-🚓 Спецоперації — +3
-🧠 Допомога — +1
-⏱ Актив — +1
-📢 Ініціатива — +2
-🤝 Командна робота — +1
-📝 Справи — +3
-
-❌ ШТРАФИ:
-- Порушення -2
-- Догана -3
-- Неактив -2
-- Конфлікти -2
-</pre>
 </div>
 
-<div class="box">
-<h2>📜 СТАТУТ ДБР</h2>
-<pre>
-👤 Поведінка з цивільними — заборона грубості
-🎥 Міранда + відеофіксація
-🔫 Затримання
-🎖 Субординація
-📘 Кодекс
-⚖ Конституція
-</pre>
-</div>
-
-<div class="box">
-<h2>📘 КОДЕКС ДБР</h2>
-<pre>
-⚖ Честь і гідність
-🎖 Етика
-🏛 Відданість службі
-🔒 Конфіденційність
-📢 Відповідальність
-</pre>
-</div>
-
-<!-- ADMIN -->
-<div class="box">
-<h2>🛠 АДМІНКА</h2>
-
-<input id="adminPass" type="password" placeholder="Пароль">
-<button onclick="openAdmin()">Увійти</button>
-
-<div id="adminPanel" style="display:none">
-
-<input id="target" placeholder="Ім'я гравця">
-
-<input id="newRank" placeholder="Звання">
-<button onclick="setRank()">Змінити звання</button>
-
-<input id="newCar" placeholder="Авто">
-<button onclick="setCar()">Змінити авто</button>
-
-<input id="giveDB" type="number" placeholder="Видати DB">
-<button onclick="addDB()">Видати DB</button>
-
-<button style="background:red" onclick="ban()">BAN</button>
-
-</div>
-</div>
-
-</div><script>
-
+<script>
 let user=null;
 
-/* REGISTER */
+function saveUsers(){
+localStorage.setItem("users",JSON.stringify(users));
+}
+
+function loadUsers(){
+return JSON.parse(localStorage.getItem("users")||"[]");
+}
+
+let users=loadUsers();
+
+// REGISTER
 function register(){
+let u=getForm();
 
-user={
-name:name.value,
-rank:rank.value,
-badge:badge.value,
-car:car.value,
-db:100,
-color:"green",
-banned:false
-};
-
-save();
-load();
-}
-
-/* SAVE */
-function save(){
-localStorage.setItem("dbr_user",JSON.stringify(user));
-}
-
-/* LOAD */
-function load(){
-
-let data=JSON.parse(localStorage.getItem("dbr_user"));
-
-if(data){
-user=data;
-}
-
-if(!user) return;
-
-if(user.banned){
-document.body.innerHTML="<h1 style='color:red;text-align:center'>ВИ ЗАБАНЕНІ</h1>";
+if(users.find(x=>x.username==u.username)){
+alert("Користувач існує");
 return;
 }
 
-auth.style.display="none";
-portal.style.display="block";
+u.db=0;
+u.bg="green";
 
-p_name.innerText=user.name;
-p_rank.innerText=user.rank;
-p_car.innerText=user.car;
-p_db.innerText=user.db;
-p_color.innerText=user.color;
+users.push(u);
+saveUsers();
 
-profileBox.className="profile "+user.color;
+alert("OK");
 }
 
-load();
+// LOGIN
+function login(){
+let u=getForm();
 
-/* SHOP */
-function buy(color,cost){
+let found=users.find(x=>x.username==u.username && x.password==u.password);
 
-if(user.db>=cost){
-user.db-=cost;
-user.color=color;
-save();
-load();
-}else{
-alert("Недостатньо DB");
-}
+if(!found){
+alert("Невірно");
+return;
 }
 
-/* ADMIN */
-function openAdmin(){
-if(adminPass.value==="1234"){
-adminPanel.style.display="block";
-}else{
-alert("Невірний пароль");
-}
+user=found;
+
+document.getElementById("auth").classList.add("hidden");
+document.getElementById("panel").classList.remove("hidden");
+
+updateUI();
+document.body.style.background=user.bg;
 }
 
-/* ACTIONS */
-function setRank(){
-user.rank=newRank.value;
-save();load();
+// UI
+function updateUI(){
+info.innerText=user.username+" | "+user.rank;
+db.innerText=user.db;
 }
 
-function setCar(){
-user.car=newCar.value;
-save();load();
+// BUY
+function buy(color,price){
+if(user.db<price){alert("нема DB");return;}
+
+user.db-=price;
+user.bg=color;
+document.body.style.background=color;
+update();
 }
 
-function addDB(){
-user.db+=Number(giveDB.value);
-save();load();
+// SET BG
+function setBg(c){
+user.bg=c;
+document.body.style.background=c;
+update();
 }
 
-function ban(){
-user.banned=true;
-save();
-load();
+// ADMIN
+function giveDB(){
+if(adminPass.value!="DBR2026") return alert("no admin");
+
+let t=users.find(x=>x.username==target.value);
+if(!t)return;
+
+t.db+=Number(amount.value);
+
+saveUsers();
+alert("OK");
+updateUI();
 }
 
+// SAVE
+function update(){
+saveUsers();
+updateUI();
+}
+
+// TABS
+function openTab(id){
+document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+
+// FORM
+function getForm(){
+return{
+username:username.value,
+rank:rank.value,
+badge:badge.value,
+car:car.value,
+telegram:tg.value,
+tgname:tgname.value,
+roblox:roblox.value,
+password:password.value
+};
+}
 </script>
+
+</body>
+</html>
