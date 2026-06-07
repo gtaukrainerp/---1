@@ -11,7 +11,6 @@ margin:0;
 font-family:Arial;
 background:#04130b;
 color:white;
-transition:0.3s;
 }
 
 header{
@@ -23,7 +22,7 @@ text-shadow:0 0 10px #00ff88;
 }
 
 .box{
-max-width:500px;
+max-width:600px;
 margin:10px auto;
 padding:15px;
 border:1px solid #00ff88;
@@ -31,7 +30,7 @@ border-radius:10px;
 background:#0a1f14;
 }
 
-input,select{
+input{
 width:100%;
 padding:10px;
 margin:5px 0;
@@ -55,24 +54,22 @@ button:hover{box-shadow:0 0 10px #00ff88;}
 
 #portal{display:none;}
 
-/* PROFILE */
 .profile{
-max-width:500px;
-margin:10px auto;
 padding:15px;
 border:1px solid #00ff88;
 border-radius:10px;
 background:#0a1f14;
 }
 
-/* COLORS */
+.red{background:#ff3b3b !important;}
 .blue{background:#1e66ff !important;}
 .gold{background:#d4af37 !important;color:black !important;}
-.red{background:#ff3b3b !important;}
 .green{background:#00ff88 !important;}
 
-/* ADMIN */
-#adminPanel{display:none;}
+pre{
+white-space:pre-wrap;
+color:#b6ffda;
+}
 </style>
 </head>
 
@@ -87,19 +84,19 @@ background:#0a1f14;
 <div class="box">
 <h2>📝 Реєстрація</h2>
 
-<input id="name" placeholder="Ім'я">
+<input id="name" placeholder="Ім'я та прізвище">
 <input id="rank" placeholder="Звання">
 <input id="badge" placeholder="Жетон">
-<input id="car" placeholder="Номер авто">
+<input id="car" placeholder="Авто">
 
-<button onclick="register()">Старт</button>
+<button onclick="register()">ЗАРЕЄСТРУВАТИСЯ</button>
 </div>
 </div>
 
 <!-- PORTAL -->
 <div id="portal">
 
-<div class="profile" id="profileBox">
+<div id="profileBox" class="profile">
 <h3>👤 Профіль</h3>
 <p>Ім'я: <span id="p_name"></span></p>
 <p>Звання: <span id="p_rank"></span></p>
@@ -110,13 +107,181 @@ background:#0a1f14;
 
 <!-- SHOP -->
 <div class="box">
-<h2>🛒 Магазин кольорів</h2>
+<h2>🛒 Магазин DB</h2>
+<button onclick="buy('blue',500)">Синій - 500 DB</button>
+<button onclick="buy('gold',1000)">Золотий - 1000 DB</button>
+<button onclick="buy('red',500)">Червоний - 500 DB</button>
+</div>
 
-<button onclick="buyColor('blue',500)">Синій - 500 DB</button>
-<button onclick="buyColor('gold',1000)">Золотий - 1000 DB</button>
-<button onclick="buyColor('red',500)">Червоний - 500 DB</button>
+<!-- RULES -->
+<div class="box">
+<h2>📊 СИСТЕМА БАЛІВ ДБР</h2>
+<pre>
+🏋️ Тренування — +1
+📑 Документація — +2
+💰 Хабарники — +3
+🔫 Злочинці — +2
+🚓 Спецоперації — +3
+🧠 Допомога — +1
+⏱ Актив — +1
+📢 Ініціатива — +2
+🤝 Командна робота — +1
+📝 Справи — +3
+
+❌ ШТРАФИ:
+- Порушення -2
+- Догана -3
+- Неактив -2
+- Конфлікти -2
+</pre>
+</div>
+
+<div class="box">
+<h2>📜 СТАТУТ ДБР</h2>
+<pre>
+👤 Поведінка з цивільними — заборона грубості
+🎥 Міранда + відеофіксація
+🔫 Затримання
+🎖 Субординація
+📘 Кодекс
+⚖ Конституція
+</pre>
+</div>
+
+<div class="box">
+<h2>📘 КОДЕКС ДБР</h2>
+<pre>
+⚖ Честь і гідність
+🎖 Етика
+🏛 Відданість службі
+🔒 Конфіденційність
+📢 Відповідальність
+</pre>
 </div>
 
 <!-- ADMIN -->
 <div class="box">
-<h2>🛠
+<h2>🛠 АДМІНКА</h2>
+
+<input id="adminPass" type="password" placeholder="Пароль">
+<button onclick="openAdmin()">Увійти</button>
+
+<div id="adminPanel" style="display:none">
+
+<input id="target" placeholder="Ім'я гравця">
+
+<input id="newRank" placeholder="Звання">
+<button onclick="setRank()">Змінити звання</button>
+
+<input id="newCar" placeholder="Авто">
+<button onclick="setCar()">Змінити авто</button>
+
+<input id="giveDB" type="number" placeholder="Видати DB">
+<button onclick="addDB()">Видати DB</button>
+
+<button style="background:red" onclick="ban()">BAN</button>
+
+</div>
+</div>
+
+</div><script>
+
+let user=null;
+
+/* REGISTER */
+function register(){
+
+user={
+name:name.value,
+rank:rank.value,
+badge:badge.value,
+car:car.value,
+db:100,
+color:"green",
+banned:false
+};
+
+save();
+load();
+}
+
+/* SAVE */
+function save(){
+localStorage.setItem("dbr_user",JSON.stringify(user));
+}
+
+/* LOAD */
+function load(){
+
+let data=JSON.parse(localStorage.getItem("dbr_user"));
+
+if(data){
+user=data;
+}
+
+if(!user) return;
+
+if(user.banned){
+document.body.innerHTML="<h1 style='color:red;text-align:center'>ВИ ЗАБАНЕНІ</h1>";
+return;
+}
+
+auth.style.display="none";
+portal.style.display="block";
+
+p_name.innerText=user.name;
+p_rank.innerText=user.rank;
+p_car.innerText=user.car;
+p_db.innerText=user.db;
+p_color.innerText=user.color;
+
+profileBox.className="profile "+user.color;
+}
+
+load();
+
+/* SHOP */
+function buy(color,cost){
+
+if(user.db>=cost){
+user.db-=cost;
+user.color=color;
+save();
+load();
+}else{
+alert("Недостатньо DB");
+}
+}
+
+/* ADMIN */
+function openAdmin(){
+if(adminPass.value==="1234"){
+adminPanel.style.display="block";
+}else{
+alert("Невірний пароль");
+}
+}
+
+/* ACTIONS */
+function setRank(){
+user.rank=newRank.value;
+save();load();
+}
+
+function setCar(){
+user.car=newCar.value;
+save();load();
+}
+
+function addDB(){
+user.db+=Number(giveDB.value);
+save();load();
+}
+
+function ban(){
+user.banned=true;
+save();
+load();
+}
+
+</script>
